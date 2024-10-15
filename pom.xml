@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>macedos</groupId>
-    <artifactId>controlService</artifactId>
+    <artifactId>mb-vidracaria-back</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>controlService</name>
     <description>controlService</description>

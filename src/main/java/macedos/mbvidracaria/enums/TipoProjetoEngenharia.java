@@ -1,0 +1,28 @@
+package macedos.mbvidracaria.enums;
+
+public enum TipoProjetoEngenharia {
+    JANELA,
+    PORTA,
+    FIXOS,
+    BOX,
+    FECHAMENTO_DE_PIA,
+    ESPELHO,
+    BASCULA,
+    GUARDA_CORPO,
+    STANLEY,
+    REPOSICAO,
+    SACADA,
+    SLIDE_DOOR,
+    RETRATEIS_WD,
+    IDEIA_GLASS,
+    TEC_VIDRO,
+    LIGHT_HOLDER,
+    ARTICULADO,
+    ORION,
+    ROLL_DOOR,
+    MAX_SYSTEM,
+    GLASS_INOX,
+    BLINDEX,
+    TECNOLOCK,
+    OLGA_COLOR,
+}

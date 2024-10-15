@@ -1,0 +1,91 @@
+package macedos.mbvidracaria.controller;
+
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.validation.Valid;
+import macedos.mbvidracaria.dto.usuario.*;
+import macedos.mbvidracaria.entity.Usuario;
+import macedos.mbvidracaria.service.UsuarioService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
+
+@RestController
+@RequestMapping("/api/usuarios")
+@SecurityRequirement(name = "bearer-key")
+public class UsuarioController {
+
+    @Autowired
+    private UsuarioService usuarioService;
+
+    @PostMapping("/cadastrarUsuario")
+    @Transactional
+    public ResponseEntity<UsuarioDetalhesDTO> cadastrarUsuario(@Valid @RequestBody CadastroUsuarioDTO cadastroUsuarioDTO, UriComponentsBuilder uriBuilder){
+        Usuario usuario = new Usuario();
+        usuario.setNome(cadastroUsuarioDTO.nome());
+        usuario.setCpf(cadastroUsuarioDTO.cpf());
+        usuario.setLogin(cadastroUsuarioDTO.login());
+        usuario.setSenha(cadastroUsuarioDTO.senha());
+
+        Usuario usuarioSalvo = usuarioService.cadastrarUsuario(usuario);
+        var uri = uriBuilder.path("api/usuarios/cadastrarUsuario/{id}").buildAndExpand(usuario.getId()).toUri();
+        return ResponseEntity.created(uri).body(new UsuarioDetalhesDTO(usuarioSalvo));
+    }
+
+    @GetMapping("/listarTodosUsuarios")
+    public ResponseEntity<Page<Usuario>> listarTodosUsuarios(@PageableDefault(sort = "nome")Pageable paginacao) {
+        Page<Usuario> usuarios = usuarioService.listarTodosUsuarios(paginacao);
+        return ResponseEntity.ok(usuarios);
+    }
+
+    @PutMapping("/editarUsuario")
+    @Transactional
+    public ResponseEntity<DetalhamentoUsuarioDTO> editarUsuario(@Valid @RequestBody EditarUsuarioDTO dados) {
+        Usuario usuarioEditado = usuarioService.editarUsuario(dados);
+        DetalhamentoUsuarioDTO detalhamentoUsuarioDTO = new DetalhamentoUsuarioDTO(usuarioEditado);
+        return ResponseEntity.ok(detalhamentoUsuarioDTO);
+    }
+
+    @PutMapping("/alterarSenha")
+    @Transactional
+    public ResponseEntity<Void> alterarSenha(@RequestParam String novaSenha, @RequestParam String confirmarSenha) {
+        try {
+            usuarioService.alterarSenha(novaSenha, confirmarSenha);
+            return ResponseEntity.ok().build();
+        } catch ( IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @PutMapping("/alterarSenhaUsuarioSelecionado/{usuarioId}")
+    public ResponseEntity<Void> alterarSenhaUsuarioSelecionado(@PathVariable Long usuarioId, @Valid @RequestBody AlterarSenhaDTO alterarSenhaDTO) {
+        usuarioService.alterarSenhaUsuarioSelecionado(usuarioId, alterarSenhaDTO.novaSenha(), alterarSenhaDTO.confirmarSenha());
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/desligarUsuario")
+    @Transactional
+    public ResponseEntity<DetalhamentoUsuarioDTO> desligarUsuario(@Valid @RequestBody DesligarUsuarioDTO dados) {
+        Usuario usuarioDesligado = usuarioService.desligarUsuario(dados);
+        DetalhamentoUsuarioDTO detalhamentoUsuarioDTO = new DetalhamentoUsuarioDTO(usuarioDesligado);
+        return ResponseEntity.ok(detalhamentoUsuarioDTO);
+    }
+
+    @PutMapping("/readmitirUsuario/{id}")
+    @Transactional
+    public ResponseEntity<?> readmitirUsuario(@PathVariable Long id) {
+        try {
+            ReadimitirUsuarioDTO readimitirUsuarioDTO = new ReadimitirUsuarioDTO(id);
+            Usuario usuarioReadmitido = usuarioService.readimitirUsuario(readimitirUsuarioDTO);
+            UsuarioDetalhesDTO usuarioDetalhesDTO = new UsuarioDetalhesDTO(usuarioReadmitido);
+            return ResponseEntity.ok(usuarioDetalhesDTO);
+        } catch (IllegalStateException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+}

@@ -1,41 +1,21 @@
 package macedos.mbvidracaria.entity.servico;
 
+import jakarta.persistence.*;
+import lombok.*;
+
+@Entity
+@Table(name = "foto_servico")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(of = "id")
 public class FotoServico {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String caminho;
+    @ManyToOne
     private Servico servico;
 
-    public FotoServico(String caminho, Servico servico) {
-        this.caminho = caminho;
-        this.servico = servico;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getCaminho() {
-        return caminho;
-    }
-
-    public Servico getServico() {
-        return servico;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setCaminho(String caminho) {
-        this.caminho = caminho;
-    }
-
-    public void setServico(Servico servico) {
-        this.servico = servico;
-    }
-
-    @Override
-    public String toString() {
-        return "FotoServico [id=" + id + ", caminho=" + caminho + ", servico=" + servico + "]";
-    }
 }

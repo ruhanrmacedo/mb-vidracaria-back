@@ -78,7 +78,7 @@ public class UsuarioService {
     public Usuario desligarUsuario(DesligarUsuarioDTO dados) {
         var usuarioDesligado = usuarioRepository.getReferenceById(dados.id());
         usuarioDesligado.desligarUsuario(dados);
-        return usuarioDesligado;
+        return usuarioRepository.save(usuarioDesligado); // Salva o usuário modificado no banco.
     }
 
     public Usuario readimitirUsuario(ReadimitirUsuarioDTO readimitirUsuarioDTO) {

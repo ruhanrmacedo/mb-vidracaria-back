@@ -38,7 +38,7 @@ public class MaterialService {
                     cadastroMaterialDTO.temperado(),
                     cadastroMaterialDTO.precoPorKg()
             );
-        } else if (cadastroMaterialDTO.comprimento() != null && cadastroMaterialDTO.largura() != null && cadastroMaterialDTO.espessura() != null && cadastroMaterialDTO.precoPorPeca() != null) {
+        } else if (cadastroMaterialDTO.comprimento() != null && cadastroMaterialDTO.largura() != null && cadastroMaterialDTO.espessura() != null && cadastroMaterialDTO.precoPorPeca() != null && cadastroMaterialDTO.precoPorMetro() != null && cadastroMaterialDTO.porMetro() != null) {
             // Criar Aluminio
             material = new Aluminio(
                     null,
@@ -51,7 +51,9 @@ public class MaterialService {
                     cadastroMaterialDTO.comprimento(),
                     cadastroMaterialDTO.largura(),
                     cadastroMaterialDTO.espessura(),
-                    cadastroMaterialDTO.precoPorPeca()
+                    cadastroMaterialDTO.precoPorPeca(),
+                    cadastroMaterialDTO.precoPorMetro(),
+                    cadastroMaterialDTO.porMetro()
             );
         } else if (cadastroMaterialDTO.precoPorUnidade() != null) {
             // Verifica se é um Acessório ou Ferragens
